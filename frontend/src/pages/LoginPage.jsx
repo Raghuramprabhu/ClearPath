@@ -28,18 +28,22 @@ export default function LoginPage() {
   ];
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <div className="logo-icon login-logo">CP</div>
-        <h1>ClearPath</h1>
-        <p className="tagline">You think. We coordinate.</p>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <div id="google-signin-button"></div>
+    <div className="login-container" role="main" aria-label="Login page">
+      <div className="login-card" role="region" aria-label="Sign in to ClearPath">
+        <div className="logo-icon login-logo" aria-hidden="true">CP</div>
+        <h1 id="login-heading">ClearPath</h1>
+        <p className="tagline" id="login-description">You think. We coordinate.</p>
+        <div style={{ display: 'flex', justifyContent: 'center' }} role="region" aria-label="Google Sign-In">
+          <div id="google-signin-button" aria-describedby="login-description"></div>
         </div>
-        {!gsiReady && <p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 12 }}>Loading sign-in...</p>}
-        <div className="features-preview">
-          <p>What you get</p>
-          <ul>
+        {!gsiReady && (
+          <p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 12 }} role="status" aria-live="polite">
+            Loading sign-in...
+          </p>
+        )}
+        <div className="features-preview" aria-labelledby="features-heading">
+          <p id="features-heading">What you get</p>
+          <ul role="list">
             {features.map((f, i) => <li key={i}>{f}</li>)}
           </ul>
         </div>

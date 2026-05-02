@@ -17,8 +17,9 @@ function AppContent() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-primary)' }}>
-        <div className="loading-spinner" style={{ width: 40, height: 40 }} />
+      <div role="status" aria-label="Loading application" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-primary)' }}>
+        <div className="loading-spinner" style={{ width: 40, height: 40 }} aria-hidden="true" />
+        <span className="sr-only">Loading ClearPath...</span>
       </div>
     );
   }
@@ -27,8 +28,9 @@ function AppContent() {
 
   return (
     <div className="app-layout">
+      <a href="#main-content" className="skip-link">Skip to main content</a>
       <Sidebar />
-      <main className="main-content">
+      <main className="main-content" id="main-content" role="main" aria-label="Page content">
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/pre-meeting" element={<PreMeetingGenie />} />
