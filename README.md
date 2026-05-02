@@ -2,66 +2,103 @@
 
 **You think. We coordinate.**
 
-ClearPath is an AI-powered team collaboration platform that eliminates the cognitive overhead of coordination. It offloads scheduling, preparation, follow-up, and task routing by deeply integrating with the Google Ecosystem (Gemini, Calendar, Docs, Sheets).
+> Every collaboration tool was built for how managers think teams should work.
+> ClearPath was built for how humans actually work.
 
-## Features
+ClearPath eliminates the cognitive overhead of team coordination using **Google Ecosystem + Gemini AI**. It handles scheduling, preparation, follow-up, and task monitoring — so your brain can focus on the actual work.
 
-- **Pre-Meeting Genie:** Automatically generates a personalized brief for each attendee before a meeting based on calendar agendas and current tasks.
-- **Post-Meeting Intelligence:** Extracts decisions, action items, owners, and deadlines from raw meeting notes using Gemini, and auto-populates Google Sheets.
-- **Smart Help Scheduler:** Uses natural language processing to find the best time for team members to meet, considering existing commitments and task urgency.
-- **Daily Cognitive Offload:** Recommends an optimal daily schedule based on tasks and deadlines, prioritizing deep work in the morning.
+## ✨ Core Features
 
-## Architecture
+| Feature | Description |
+|---------|-------------|
+| **Pre-Meeting Genie** | AI-generated personalised brief 30 min before every meeting |
+| **Post-Meeting Intel** | Paste raw notes → structured action items, owners, deadlines |
+| **Smart Help Scheduler** | Natural language → find slot → create Google Meet event |
+| **Daily Cognitive Offload** | AI-recommended optimal day pushed to Google Calendar |
+| **Gentle Nudge** | Psychologically safe task monitoring — check-in, not follow-up |
+| **Ippo Task Intelligence** | Break overwhelming tasks into momentum-friendly steps |
 
-ClearPath is a monorepo containing:
-- **Frontend**: React 18 + Vite, styled with Tailwind CSS.
-- **Backend**: Node.js + Express server.
-- **AI Layer**: `@google/genai` using the `gemini-1.5-pro` model.
-- **Integrations**: `googleapis` for Calendar, Docs, Sheets, Slides, and Tasks.
+## 🏗 Architecture
 
-### Deployment Strategy
+```
+ClearPath/
+├── frontend/           # React 18 + Vite
+│   └── src/
+│       ├── components/ # Sidebar
+│       ├── hooks/      # useAuth (Google OAuth)
+│       ├── pages/      # Dashboard, 6 features, Settings
+│       └── services/   # API client layer
+├── backend/            # Node.js + Express
+│   ├── routes/         # auth, meetings, scheduler, nudge, ippo
+│   ├── services/       # gemini, googleApis, pubsub
+│   └── middleware/     # auth, rateLimiter, sanitize
+├── Dockerfile          # Multi-stage build for Cloud Run
+└── README.md
+```
 
-Both the frontend and backend are containerized into a single Docker image and deployed to **Google Cloud Run**. The frontend static assets are built and served by the Express backend, eliminating CORS issues and simplifying the deployment pipeline.
+## 🔌 Google Integrations (12 services)
 
-## Getting Started
+- Gemini 1.5 Pro — AI intelligence layer (7 prompt functions)
+- Google Calendar API — availability, events, scheduling
+- Google Docs API — agenda reading, summary creation
+- Google Sheets API — task registry, action items
+- Google Slides API — slide thumbnails for context
+- Google OAuth 2.0 — single sign-on with scoped permissions
+- Google Cloud Run — serverless backend hosting
+- Google Pub/Sub — calendar event triggers
+- Firebase Firestore — real-time team state
+- Firebase Cloud Messaging — push notifications
+- Google Tasks API — personal task sync
+- Google Meet — auto-generated meeting links
+
+## 🚀 Getting Started
 
 ### Prerequisites
-
-1. Create a Google Cloud Platform (GCP) project.
-2. Enable the following APIs: Calendar API, Docs API, Sheets API, Slides API, Tasks API, and Generative Language API (Gemini).
-3. Configure the OAuth Consent Screen and obtain a `Client ID` and `Client Secret`.
-4. (Optional) Set up a Firebase project for real-time state and notifications.
+1. Create a GCP project
+2. Enable: Calendar, Docs, Sheets, Slides, Tasks, Generative Language APIs
+3. Configure OAuth Consent Screen → get Client ID + Secret
+4. Get a Gemini API key
 
 ### Local Development
 
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url>
-   cd ClearPath
-   ```
+```bash
+# Backend
+cd backend && npm install
+cp .env.example .env  # Fill in your credentials
+node index.js
 
-2. **Backend Setup:**
-   ```bash
-   cd backend
-   npm install
-   cp .env.example .env
-   # Fill out .env with your GCP and Gemini credentials
-   npm start
-   ```
+# Frontend (new terminal)
+cd frontend && npm install --legacy-peer-deps
+npm run dev
+```
 
-3. **Frontend Setup:**
-   ```bash
-   cd ../frontend
-   npm install
-   # Update the Google Client ID in src/App.jsx
-   npm run dev
-   ```
-
-### Deployment to Google Cloud Run (No local Docker required)
-
-You can deploy the app directly from source using the Google Cloud CLI. Cloud Build will automatically use the provided `Dockerfile` to build the container.
+### Deploy to Cloud Run
 
 ```bash
 cd ClearPath
 gcloud run deploy clearpath-service --source . --region us-central1 --allow-unauthenticated
 ```
+
+## 🔐 Security
+
+- OAuth 2.0 with scoped permissions
+- No hardcoded secrets (`.env.example` only)
+- JWT in httpOnly cookies (not localStorage)
+- Gemini calls backend-only (never from frontend)
+- Input sanitization on all endpoints
+- Rate limiting on all API routes
+- Gentle Nudge + Ippo data is private — managers never see it
+
+## 🎯 Demo Script
+
+1. Google login → scoped permissions visible
+2. Pre-Meeting Genie → brief generated from Google Doc
+3. Post-Meeting → paste notes, watch Sheets populate
+4. Smart Help → natural language → calendar invite
+5. Gentle Nudge → detect stuck task → private check-in
+6. Ippo → overwhelming task → 4 momentum steps
+7. Daily Offload → calendar populated from priorities
+
+## 📜 License
+
+MIT
